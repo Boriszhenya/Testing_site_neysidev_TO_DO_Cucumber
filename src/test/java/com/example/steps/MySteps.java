@@ -1,16 +1,16 @@
 package com.example.steps;
 
-import com.example.context.Context;
 import com.example.pages.MainPage;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import java.util.List;
-import java.util.Set;
 
 import static com.example.context.Context.scenario;
+import static com.example.context.Context.wait;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -46,8 +46,7 @@ public class MySteps {
     @And("added {string} to the to-do list")
     public void addedToTheToDoList(String task) {
         new MainPage().addOneTask(task);
-        //Thread.sleep(3000);
-    }
+     }
 
     @When("the user deletes the task {string}")
     public void theUserDeletesTheTask(String task) {
@@ -86,15 +85,8 @@ public class MySteps {
     public void theUserUsingTheDeleteAllTasksButtonDeletesThemAll() {
         MainPage m = new MainPage();
         m.buttonClearAllTask.click();
-        Set<String> windowHandles = Context.getDriver().getWindowHandles();
-        for (String windowHandle : windowHandles) {
-            if (!windowHandle.equals(Context.getDriver().getWindowHandle())) {
-                Context.getDriver().switchTo().window(windowHandle);
-                break;
-            }
-        }
+        wait.until(ExpectedConditions.visibilityOf(m.buttonAllDeleteWindow));
         m.buttonAllDeleteWindow.click();
-        Context.getDriver().switchTo().defaultContent();
     }
 
     @And("user the user removes the {int}nd task from the to-do list")
@@ -104,7 +96,6 @@ public class MySteps {
 
     @Then("{int} tasks remain in the to-do list")
     public void tasksRemainInTheToDoList(int numberOfRecords) {
-
         assertEquals(numberOfRecords, new MainPage().listTasks.size());
     }
 }

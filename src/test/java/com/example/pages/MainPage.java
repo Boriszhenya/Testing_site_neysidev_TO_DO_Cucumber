@@ -1,12 +1,13 @@
 package com.example.pages;
 
-import com.example.context.Context;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import java.util.List;
-import java.util.Set;
+
+import static com.example.context.Context.wait;
 
 public class MainPage extends BasePage {
 
@@ -60,33 +61,18 @@ public class MainPage extends BasePage {
         for (int i = 0; i < listTasks.size(); i++) {
             if (listTasks.get(i).getText().equals(task)) {
                 listButtonsDeleteTask.get(i).click();
-
-                Set<String> windowHandles = Context.getDriver().getWindowHandles();
-                for (String windowHandle : windowHandles) {
-                    if (!windowHandle.equals(Context.getDriver().getWindowHandle())) {
-                        Context.getDriver().switchTo().window(windowHandle);
-                        break;
-                    }
-                }
+                wait.until(ExpectedConditions.visibilityOf(buttonDeleteWindow));
                 buttonDeleteWindow.click();
-                Context.getDriver().switchTo().defaultContent();
             }
         }
     }
 
-    public void deletingTaskByNumberInTheToDoList(int recordNumber) {
+    public void deletingTaskByNumberInTheToDoList(int recordNumber)  {
         for (int i = 0; i < listTasks.size(); i++) {
             if (i == (recordNumber - 1)) {
                 listButtonsDeleteTask.get(i).click();
-                Set<String> windowHandles = Context.getDriver().getWindowHandles();
-                for (String windowHandle : windowHandles) {
-                    if (!windowHandle.equals(Context.getDriver().getWindowHandle())) {
-                        Context.getDriver().switchTo().window(windowHandle);
-                        break;
-                    }
-                }
+                wait.until(ExpectedConditions.visibilityOf(buttonDeleteWindow));
                 buttonDeleteWindow.click();
-                Context.getDriver().switchTo().defaultContent();
             }
         }
     }
