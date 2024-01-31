@@ -1,5 +1,6 @@
 package com.example.pages;
 
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -7,7 +8,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import java.util.List;
 
-import static com.example.context.Context.wait;
+import static com.example.context.Context.*;
 
 public class MainPage extends BasePage {
 
@@ -67,7 +68,7 @@ public class MainPage extends BasePage {
         }
     }
 
-    public void deletingTaskByNumberInTheToDoList(int recordNumber)  {
+    public void deletingTaskByNumberInTheToDoList(int recordNumber) {
         for (int i = 0; i < listTasks.size(); i++) {
             if (i == (recordNumber - 1)) {
                 listButtonsDeleteTask.get(i).click();
@@ -76,4 +77,37 @@ public class MainPage extends BasePage {
             }
         }
     }
+
+    public boolean isHaveAfter(WebElement element) {
+        return (boolean) ((JavascriptExecutor) getDriver()).executeScript(
+                "return window.getComputedStyle(arguments[0], '::after').content !== 'none';", element);
+    }
+
+    public void markOneTaskFromList(String task) {
+        for (int i = 0; i < listTasks.size(); i++) {
+            if (listTasks.get(i).getText().equals(task)) {
+                listButtonsCompletedTask.get(i).click();
+            }
+        }
+    }
+
+    public boolean isMarkOneTaskFromList(String task) {
+        for (WebElement listTask : listTasks) {
+            if (listTask.getText().equals(task)) {
+                isHaveAfter(listTask);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void unmarkOneTaskFromList(String task) {
+        for (int i = 0; i < listTasks.size(); i++) {
+            if (listTasks.get(i).getText().equals(task)&isHaveAfter(listTasks.get(i))) {
+                listButtonsCompletedTask.get(i).click();
+            }
+        }
+    }
+
+
 }

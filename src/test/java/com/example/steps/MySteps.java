@@ -5,14 +5,14 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import java.util.List;
 
 import static com.example.context.Context.scenario;
 import static com.example.context.Context.wait;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class MySteps {
 
@@ -46,7 +46,7 @@ public class MySteps {
     @And("added {string} to the to-do list")
     public void addedToTheToDoList(String task) {
         new MainPage().addOneTask(task);
-     }
+    }
 
     @When("the user deletes the task {string}")
     public void theUserDeletesTheTask(String task) {
@@ -97,5 +97,44 @@ public class MySteps {
     @Then("{int} tasks remain in the to-do list")
     public void tasksRemainInTheToDoList(int numberOfRecords) {
         assertEquals(numberOfRecords, new MainPage().listTasks.size());
+    }
+
+    @When("user does not enter text and adds a new task")
+    public void userDoesNotEnterTextAndAddsANewTask() {
+        new MainPage().newTaskAdditionField.sendKeys(Keys.ENTER);
+    }
+
+    @Then("the to-do list is empty and it says, {string}")
+    public void theToDoListIsEmptyAndItSays(String message) {
+        MainPage m = new MainPage();
+        assertTrue(m.listTasks.isEmpty());
+        assertEquals(message, m.blockLabeledNoTasks.getText());
+    }
+
+    @When("the user marks the {string} task as completed")
+    public void theUserMarksTheTaskAsCompleted(String task) {
+        new MainPage().markOneTaskFromList(task);
+    }
+
+    @Then("the {string} task has a status of completed")
+    public void theTaskHasAStatusOfCompleted(String task) {
+        assertTrue(new MainPage().isMarkOneTaskFromList(task));
+    }
+
+    @And("the user marks the task {string} as completed")
+    public void andTheUserMarksTheTaskAsCompleted(String task) {
+        new MainPage().markOneTaskFromList(task);
+    }
+
+    @When("a user marks a completed task {string} as not completed")
+    public void aUserMarksACompletedTaskAsNotCompleted(String task) {
+        new MainPage().unmarkOneTaskFromList(task);
+    }
+
+
+    @Then("the task has a status of not completed")
+    public void theTaskHasAStatusOfNotCompleted() {
+        MainPage m = new MainPage();
+        assertFalse(m.isHaveAfter(m.listTasks.getFirst()));
     }
 }

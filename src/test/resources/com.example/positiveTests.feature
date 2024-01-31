@@ -40,19 +40,20 @@ Feature: а test of the TO-DO List App
     When  the user using the delete all tasks button deletes them all
     Then the to-do list will be empty
 
-#  Scenario: changing the status of an uncompleted task to "completed" in the to-do list
-#    Given user is on the main page
-#    And a user adds the new task "Hello world!"
-#    When the user marks the "Hello World!" task as completed
-#    Then the "Hello world!" task has a status of completed
-#
-#  Scenario: changing the status of a completed task to " not completed" in the to-do list
-#    Given user is on the main page
-#    And a user adds the new task "Hello world!"
-#    When a user marks a completed task "Hello World!" as not completed
-#    Then the task "Hello world!" has a status of not completed
-#
-#
+  Scenario: changing the status of an uncompleted task to "completed" in the to-do list
+    Given user is on the main page
+    And a user adds the new task "Hello world!"
+    When the user marks the "Hello world!" task as completed
+    Then the "Hello world!" task has a status of completed
+
+  Scenario: changing the status of a completed task to " not completed" in the to-do list
+    Given user is on the main page
+    And a user adds the new task "Hello world!"
+    And the user marks the task "Hello world!" as completed
+    When a user marks a completed task "Hello world!" as not completed
+    Then the task has a status of not completed
+
+
 #  Scenario: changing the status of 2 tasks as execution from the to-do list
 #    Given user is on the main page
 #    When a user adds a task list to the to-do list
