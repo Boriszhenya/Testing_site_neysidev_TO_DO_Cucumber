@@ -1,10 +1,12 @@
 package com.example.pages;
 
+import com.example.context.Context;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 import java.util.List;
+import java.util.Set;
 
 public class MainPage extends BasePage {
 
@@ -13,6 +15,12 @@ public class MainPage extends BasePage {
 
     @FindBy(xpath = "//button[@id='clear-all-tasks']")
     public WebElement buttonClearAllTask;
+
+    @FindBy(xpath = "//div[@id='remove-modal']//*[@id='remove-button']")
+    public WebElement buttonDeleteWindow;
+
+    @FindBy(xpath = "//div[@id='clear-all-tasks-modal']//*[@id='remove-button']")
+    public WebElement buttonAllDeleteWindow;
 
     @FindBy(xpath = "//ul[@id='tasks-list']/li/div/label")
     public List<WebElement> listTasks;
@@ -41,11 +49,45 @@ public class MainPage extends BasePage {
 
     public boolean isTextTask(String task) {
         for (WebElement oneTask : listTasks) {
-            System.out.println(oneTask.getText());
             if (oneTask.getText().equals(task)) {
                 return true;
             }
         }
         return false;
+    }
+
+    public void deleteOneTaskFromList(String task) {
+        for (int i = 0; i < listTasks.size(); i++) {
+            if (listTasks.get(i).getText().equals(task)) {
+                listButtonsDeleteTask.get(i).click();
+
+                Set<String> windowHandles = Context.getDriver().getWindowHandles();
+                for (String windowHandle : windowHandles) {
+                    if (!windowHandle.equals(Context.getDriver().getWindowHandle())) {
+                        Context.getDriver().switchTo().window(windowHandle);
+                        break;
+                    }
+                }
+                buttonDeleteWindow.click();
+                Context.getDriver().switchTo().defaultContent();
+            }
+        }
+    }
+
+    public void deletingTaskByNumberInTheToDoList(int recordNumber) {
+        for (int i = 0; i < listTasks.size(); i++) {
+            if (i == (recordNumber - 1)) {
+                listButtonsDeleteTask.get(i).click();
+                Set<String> windowHandles = Context.getDriver().getWindowHandles();
+                for (String windowHandle : windowHandles) {
+                    if (!windowHandle.equals(Context.getDriver().getWindowHandle())) {
+                        Context.getDriver().switchTo().window(windowHandle);
+                        break;
+                    }
+                }
+                buttonDeleteWindow.click();
+                Context.getDriver().switchTo().defaultContent();
+            }
+        }
     }
 }
